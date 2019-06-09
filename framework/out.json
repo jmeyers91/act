@@ -1,0 +1,95 @@
+[
+  {
+    "actionName": "createPost",
+    "importPath": "/home/jimmy/projects/act/server/src/actions/createPost/createPost.action",
+    "endpoint": "/api/createPost",
+    "filePath": "/home/jimmy/projects/act/server/src/actions/createPost/createPost.action.ts",
+    "optionsSchema": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "additionalProperties": false,
+      "defaultProperties": [],
+      "properties": {
+        "content": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title"
+      ],
+      "type": "object"
+    },
+    "resultSchema": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "additionalProperties": false,
+      "defaultProperties": [],
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "id": {
+          "type": "number"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "content",
+        "id",
+        "title"
+      ],
+      "type": "object"
+    },
+    "optionsSchemaString": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"additionalProperties\":false,\"defaultProperties\":[],\"properties\":{\"content\":{\"type\":[\"null\",\"string\"]},\"title\":{\"type\":\"string\"}},\"required\":[\"title\"],\"type\":\"object\"}",
+    "resultSchemaString": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"additionalProperties\":false,\"defaultProperties\":[],\"properties\":{\"content\":{\"type\":\"string\"},\"id\":{\"type\":\"number\"},\"title\":{\"type\":\"string\"}},\"required\":[\"content\",\"id\",\"title\"],\"type\":\"object\"}",
+    "optionsInterface": "export interface CreatePostOptions {\n  content?: null | string;\n  title: string;\n}\n",
+    "resultInterface": "export interface CreatePostResult {\n  content: string;\n  id: number;\n  title: string;\n}\n",
+    "optionsInterfaceName": "CreatePostOptions",
+    "resultInterfaceName": "CreatePostResult",
+    "hasOptions": true,
+    "hasResult": true,
+    "validateResult": true
+  },
+  {
+    "actionName": "getUsers",
+    "importPath": "/home/jimmy/projects/act/server/src/actions/getUsers/getUsers.action",
+    "endpoint": "/api/getUsers",
+    "filePath": "/home/jimmy/projects/act/server/src/actions/getUsers/getUsers.action.ts",
+    "optionsSchema": null,
+    "resultSchema": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "items": {
+        "additionalProperties": false,
+        "defaultProperties": [],
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "optionsSchemaString": null,
+    "resultSchemaString": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"items\":{\"additionalProperties\":false,\"defaultProperties\":[],\"properties\":{\"id\":{\"type\":\"number\"},\"name\":{\"type\":\"string\"}},\"required\":[\"id\",\"name\"],\"type\":\"object\"},\"type\":\"array\"}",
+    "optionsInterface": "export type GetUsersResult = {\n  id: number;\n  name: string;\n}[];\n",
+    "optionsInterfaceName": "GetUsersOptions",
+    "resultInterfaceName": "GetUsersResult",
+    "hasOptions": false,
+    "hasResult": true,
+    "validateResult": true
+  }
+]

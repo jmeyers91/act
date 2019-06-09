@@ -1,0 +1,655 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "defaultProperties": [],
+  "definitions": {
+    "Parser": {
+      "defaultProperties": [],
+      "properties": {
+        "astFormat": {
+          "type": "string"
+        },
+        "hasPragma": {
+          "defaultProperties": [],
+          "type": "object"
+        },
+        "locEnd": {
+          "defaultProperties": [],
+          "type": "object"
+        },
+        "locStart": {
+          "defaultProperties": [],
+          "type": "object"
+        },
+        "parse": {
+          "defaultProperties": [],
+          "type": "object"
+        },
+        "preprocess": {
+          "defaultProperties": [],
+          "type": "object"
+        }
+      },
+      "required": [
+        "astFormat",
+        "locEnd",
+        "locStart",
+        "parse"
+      ],
+      "type": "object"
+    },
+    "Partial<RequiredOptions>": {
+      "defaultProperties": [],
+      "properties": {
+        "arrowParens": {
+          "description": "Include parentheses around a sole arrow function parameter.",
+          "enum": [
+            "always",
+            "avoid"
+          ],
+          "type": "string"
+        },
+        "bracketSpacing": {
+          "description": "Print spaces between brackets in object literals.",
+          "type": "boolean"
+        },
+        "endOfLine": {
+          "description": "Which end of line characters to apply.",
+          "enum": [
+            "auto",
+            "cr",
+            "crlf",
+            "lf"
+          ],
+          "type": "string"
+        },
+        "filepath": {
+          "description": "Specify the input filepath. This will be used to do parser inference.",
+          "type": "string"
+        },
+        "htmlWhitespaceSensitivity": {
+          "description": "How to handle whitespaces in HTML.",
+          "enum": [
+            "css",
+            "ignore",
+            "strict"
+          ],
+          "type": "string"
+        },
+        "insertPragma": {
+          "description": "Prettier can insert a special @format marker at the top of files specifying that\nthe file has been formatted with prettier. This works well when used in tandem with\nthe --require-pragma option. If there is already a docblock at the top of\nthe file then this option will add a newline to it with the @format marker.",
+          "type": "boolean"
+        },
+        "jsxBracketSameLine": {
+          "description": "Put the `>` of a multi-line JSX element at the end of the last line instead of being alone on the next line.",
+          "type": "boolean"
+        },
+        "jsxSingleQuote": {
+          "description": "Use single quotes in JSX.",
+          "type": "boolean"
+        },
+        "parser": {
+          "anyOf": [
+            {
+              "defaultProperties": [],
+              "type": "object"
+            },
+            {
+              "enum": [
+                "angular",
+                "babel",
+                "babel-flow",
+                "babylon",
+                "css",
+                "flow",
+                "graphql",
+                "html",
+                "json",
+                "json-stringify",
+                "json5",
+                "less",
+                "markdown",
+                "mdx",
+                "postcss",
+                "scss",
+                "typescript",
+                "vue",
+                "yaml"
+              ],
+              "type": "string"
+            }
+          ],
+          "description": "Specify which parser to use."
+        },
+        "plugins": {
+          "description": "The plugin API is in a beta state.",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/Plugin"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        "printWidth": {
+          "description": "Specify the line length that the printer will wrap on.",
+          "type": "number"
+        },
+        "proseWrap": {
+          "description": "By default, Prettier will wrap markdown text as-is since some services use a linebreak-sensitive renderer.\nIn some cases you may want to rely on editor/viewer soft wrapping instead, so this option allows you to opt out.",
+          "enum": [
+            "always",
+            false,
+            "never",
+            "preserve",
+            true
+          ]
+        },
+        "rangeEnd": {
+          "description": "Format only a segment of a file.",
+          "type": "number"
+        },
+        "rangeStart": {
+          "description": "Format only a segment of a file.",
+          "type": "number"
+        },
+        "requirePragma": {
+          "description": "Prettier can restrict itself to only format files that contain a special comment, called a pragma, at the top of the file.\nThis is very useful when gradually transitioning large, unformatted codebases to prettier.",
+          "type": "boolean"
+        },
+        "semi": {
+          "description": "Print semicolons at the ends of statements.",
+          "type": "boolean"
+        },
+        "singleQuote": {
+          "description": "Use single quotes instead of double quotes.",
+          "type": "boolean"
+        },
+        "tabWidth": {
+          "description": "Specify the number of spaces per indentation-level.",
+          "type": "number"
+        },
+        "trailingComma": {
+          "description": "Print trailing commas wherever possible.",
+          "enum": [
+            "all",
+            "es5",
+            "none"
+          ],
+          "type": "string"
+        },
+        "useTabs": {
+          "description": "Indent lines with tabs instead of spaces",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "Plugin": {
+      "defaultProperties": [],
+      "properties": {
+        "defaultOptions": {
+          "$ref": "#/definitions/Partial<RequiredOptions>",
+          "description": "Make all properties in T optional"
+        },
+        "languages": {
+          "items": {
+            "$ref": "#/definitions/SupportLanguage"
+          },
+          "type": "array"
+        },
+        "options": {
+          "items": {
+            "$ref": "#/definitions/SupportOption"
+          },
+          "type": "array"
+        },
+        "parsers": {
+          "additionalProperties": {
+            "$ref": "#/definitions/Parser"
+          },
+          "defaultProperties": [],
+          "type": "object"
+        },
+        "printers": {
+          "additionalProperties": {
+            "$ref": "#/definitions/Printer"
+          },
+          "defaultProperties": [],
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "Printer": {
+      "defaultProperties": [],
+      "properties": {
+        "canAttachComment": {
+          "defaultProperties": [],
+          "type": "object"
+        },
+        "embed": {
+          "defaultProperties": [],
+          "type": "object"
+        },
+        "handleComments": {
+          "defaultProperties": [],
+          "properties": {
+            "endOfLine": {
+              "defaultProperties": [],
+              "type": "object"
+            },
+            "ownLine": {
+              "defaultProperties": [],
+              "type": "object"
+            },
+            "remaining": {
+              "defaultProperties": [],
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "hasPrettierIgnore": {
+          "defaultProperties": [],
+          "type": "object"
+        },
+        "insertPragma": {
+          "defaultProperties": [],
+          "type": "object"
+        },
+        "massageAstNode": {
+          "defaultProperties": [],
+          "type": "object"
+        },
+        "printComments": {
+          "defaultProperties": [],
+          "type": "object"
+        },
+        "willPrintOwnComments": {
+          "defaultProperties": [],
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "SupportLanguage": {
+      "defaultProperties": [],
+      "properties": {
+        "aceMode": {
+          "type": "string"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "codemirrorMimeType": {
+          "type": "string"
+        },
+        "codemirrorMode": {
+          "type": "string"
+        },
+        "extensions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "filenames": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "group": {
+          "type": "string"
+        },
+        "linguistLanguageId": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "parsers": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "items": {
+                "enum": [
+                  "angular",
+                  "babel",
+                  "babel-flow",
+                  "babylon",
+                  "css",
+                  "flow",
+                  "graphql",
+                  "html",
+                  "json",
+                  "json-stringify",
+                  "json5",
+                  "less",
+                  "markdown",
+                  "mdx",
+                  "postcss",
+                  "scss",
+                  "typescript",
+                  "vue",
+                  "yaml"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ]
+        },
+        "since": {
+          "type": "string"
+        },
+        "tmScope": {
+          "type": "string"
+        },
+        "vscodeLanguageIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "aceMode",
+        "codemirrorMimeType",
+        "codemirrorMode",
+        "extensions",
+        "linguistLanguageId",
+        "name",
+        "parsers",
+        "tmScope",
+        "vscodeLanguageIds"
+      ],
+      "type": "object"
+    },
+    "SupportOption": {
+      "defaultProperties": [],
+      "properties": {
+        "array": {
+          "type": "boolean"
+        },
+        "choices": {
+          "items": {
+            "$ref": "#/definitions/SupportOptionChoice"
+          },
+          "type": "array"
+        },
+        "default": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "deprecated": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "oppositeDescription": {
+          "type": "string"
+        },
+        "range": {
+          "$ref": "#/definitions/SupportOptionRange"
+        },
+        "redirect": {
+          "$ref": "#/definitions/SupportOptionRedirect"
+        },
+        "since": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "boolean",
+            "choice",
+            "int",
+            "path"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "default",
+        "description",
+        "type"
+      ],
+      "type": "object"
+    },
+    "SupportOptionChoice": {
+      "defaultProperties": [],
+      "properties": {
+        "deprecated": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "redirect": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "since": {
+          "type": "string"
+        },
+        "value": {
+          "type": [
+            "string",
+            "boolean"
+          ]
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "type": "object"
+    },
+    "SupportOptionRange": {
+      "defaultProperties": [],
+      "properties": {
+        "end": {
+          "type": "number"
+        },
+        "start": {
+          "type": "number"
+        },
+        "step": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "end",
+        "start",
+        "step"
+      ],
+      "type": "object"
+    },
+    "SupportOptionRedirect": {
+      "defaultProperties": [],
+      "properties": {
+        "options": {
+          "type": "string"
+        },
+        "value": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      },
+      "required": [
+        "options",
+        "value"
+      ],
+      "type": "object"
+    }
+  },
+  "properties": {
+    "arrowParens": {
+      "description": "Include parentheses around a sole arrow function parameter.",
+      "enum": [
+        "always",
+        "avoid"
+      ],
+      "type": "string"
+    },
+    "bracketSpacing": {
+      "description": "Print spaces between brackets in object literals.",
+      "type": "boolean"
+    },
+    "endOfLine": {
+      "description": "Which end of line characters to apply.",
+      "enum": [
+        "auto",
+        "cr",
+        "crlf",
+        "lf"
+      ],
+      "type": "string"
+    },
+    "filepath": {
+      "description": "Specify the input filepath. This will be used to do parser inference.",
+      "type": "string"
+    },
+    "htmlWhitespaceSensitivity": {
+      "description": "How to handle whitespaces in HTML.",
+      "enum": [
+        "css",
+        "ignore",
+        "strict"
+      ],
+      "type": "string"
+    },
+    "insertPragma": {
+      "description": "Prettier can insert a special @format marker at the top of files specifying that\nthe file has been formatted with prettier. This works well when used in tandem with\nthe --require-pragma option. If there is already a docblock at the top of\nthe file then this option will add a newline to it with the @format marker.",
+      "type": "boolean"
+    },
+    "jsxBracketSameLine": {
+      "description": "Put the `>` of a multi-line JSX element at the end of the last line instead of being alone on the next line.",
+      "type": "boolean"
+    },
+    "jsxSingleQuote": {
+      "description": "Use single quotes in JSX.",
+      "type": "boolean"
+    },
+    "parser": {
+      "anyOf": [
+        {
+          "defaultProperties": [],
+          "type": "object"
+        },
+        {
+          "enum": [
+            "angular",
+            "babel",
+            "babel-flow",
+            "babylon",
+            "css",
+            "flow",
+            "graphql",
+            "html",
+            "json",
+            "json-stringify",
+            "json5",
+            "less",
+            "markdown",
+            "mdx",
+            "postcss",
+            "scss",
+            "typescript",
+            "vue",
+            "yaml"
+          ],
+          "type": "string"
+        }
+      ],
+      "description": "Specify which parser to use."
+    },
+    "plugins": {
+      "description": "The plugin API is in a beta state.",
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/Plugin"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "type": "array"
+    },
+    "printWidth": {
+      "description": "Specify the line length that the printer will wrap on.",
+      "type": "number"
+    },
+    "proseWrap": {
+      "description": "By default, Prettier will wrap markdown text as-is since some services use a linebreak-sensitive renderer.\nIn some cases you may want to rely on editor/viewer soft wrapping instead, so this option allows you to opt out.",
+      "enum": [
+        "always",
+        false,
+        "never",
+        "preserve",
+        true
+      ]
+    },
+    "rangeEnd": {
+      "description": "Format only a segment of a file.",
+      "type": "number"
+    },
+    "rangeStart": {
+      "description": "Format only a segment of a file.",
+      "type": "number"
+    },
+    "requirePragma": {
+      "description": "Prettier can restrict itself to only format files that contain a special comment, called a pragma, at the top of the file.\nThis is very useful when gradually transitioning large, unformatted codebases to prettier.",
+      "type": "boolean"
+    },
+    "semi": {
+      "description": "Print semicolons at the ends of statements.",
+      "type": "boolean"
+    },
+    "singleQuote": {
+      "description": "Use single quotes instead of double quotes.",
+      "type": "boolean"
+    },
+    "tabWidth": {
+      "description": "Specify the number of spaces per indentation-level.",
+      "type": "number"
+    },
+    "trailingComma": {
+      "description": "Print trailing commas wherever possible.",
+      "enum": [
+        "all",
+        "es5",
+        "none"
+      ],
+      "type": "string"
+    },
+    "useTabs": {
+      "description": "Indent lines with tabs instead of spaces",
+      "type": "boolean"
+    }
+  },
+  "type": "object"
+}

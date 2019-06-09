@@ -1,0 +1,25 @@
+{{#each actions}}
+{{#if optionsInterface}}
+{{{optionsInterface}}}
+{{/if}}
+{{#if resultInterface}}
+{{{resultInterface}}}
+{{/if}}
+export async function {{{actionName}}}({{#if hasOptions}}options: {{{optionsInterfaceName}}}{{/if}}): Promise<{{#if hasResult}}{{{resultInterfaceName}}}{{else}}undefined{{/if}}> {
+  {{#if hasResult}}const response = {{/if}}await fetch('{{{endpoint}}}', {
+    method: 'POST',
+    {{#if hasOptions}}
+    body: JSON.stringify(options),
+    {{/if}}
+  });
+  {{#if hasResult}}
+  return await response.json();
+  {{/if}}
+}
+
+{{/each}}
+export default {
+{{#each actions}}
+  {{actionName}},
+{{/each}}
+};

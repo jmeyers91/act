@@ -1,0 +1,34 @@
+import Ajv from 'ajv';
+{{#each actions}}
+import {{{actionName}}}Raw from '{{{importPath}}}';
+{{/each}}
+
+const ajv = new Ajv();
+type GetOptions <F> = F extends (options: infer G, ...rest: any[]) => any ? G : undefined;
+
+{{#each actions}}
+{{#if hasOptions}}
+const {{{actionName}}}OptionsSchema = {{{optionsSchemaString}}};
+const {{{actionName}}}ValidateOptions = ajv.compile({ ...{{{actionName}}}OptionsSchema, $async: true });
+{{/if}}
+{{#if hasResult}}
+  {{#if validateResult}}
+const {{{actionName}}}ResultSchema = {{{resultSchemaString}}};
+const {{{actionName}}}ValidateResult = ajv.compile({ ...{{{actionName}}}ResultSchema, $async: true });
+  {{/if}}
+{{/if}}
+export async function {{actionName}}({{#if hasOptions}}rawOptions: unknown{{/if}}): ReturnType<typeof {{{actionName}}}Raw> {
+  {{#if hasOptions}}
+  const options: GetOptions<typeof {{{actionName}}}Raw> = await {{{actionName}}}ValidateOptions(rawOptions);
+  {{/if}}
+  {{#if hasResult}}const rawResult = {{/if}}await {{{actionName}}}Raw({{#if hasOptions}}options{{/if}});
+  {{#if hasResult}}
+    {{#if validateResult}}
+  return await {{{actionName}}}ValidateResult(rawResult);
+    {{else}}
+  return rawResult;
+    {{/if}}
+  {{/if}}
+}
+
+{{/each}}

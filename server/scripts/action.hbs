@@ -1,0 +1,13 @@
+export default async function {{{actionName}}}({{#if hasOptions}}options{{/if}}) {
+  {{#if hasResult}}const response = {{/if}}await fetch('/api/{{{actionName}}}', {
+    method: 'POST',
+    {{#if hasOptions}}
+    body: JSON.stringify(options),
+    headers: { 'Content-Type': 'application/json' },
+    {{/if}}
+  });
+
+  {{#if hasResult}}
+  return await response.json();
+  {{/if}}
+}
