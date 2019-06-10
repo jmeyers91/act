@@ -16,26 +16,32 @@ const fs_1 = require("fs");
 const findActionModules_1 = __importDefault(require("./findActionModules"));
 const templates_1 = require("./templates");
 const rootPath = path_1.default.resolve(process.argv[2] || process.cwd());
-const serverOutPath = process.argv[3] || path_1.default.join(rootPath, 'src', 'act-server.ts');
-const clientOutPath = process.argv[4] || path_1.default.join(rootPath, 'src', 'act-client.ts');
+const serverOutPath = process.argv[3] || path_1.default.join(rootPath, "src", "act-server.ts");
+const clientOutPath = process.argv[4] || path_1.default.join(rootPath, "src", "act-client.ts");
 main();
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        console.time('done');
+        console.time("done");
         console.log(`Starting in ${rootPath}`);
-        const actions = yield findActionModules_1.default(rootPath);
+        const actions = (yield findActionModules_1.default(rootPath)).map(action => (Object.assign({}, action, { importPath: getServerActionImportPath(action) })));
         const clientSrc = templates_1.clientTemplate({
             actions
         });
         const serverSrc = templates_1.serverTemplate({
-            actions,
+            actions
         });
         yield Promise.all([
             writeFilePromise(clientOutPath, clientSrc),
-            writeFilePromise(serverOutPath, serverSrc),
+            writeFilePromise(serverOutPath, serverSrc)
         ]);
-        console.timeEnd('done');
+        console.timeEnd("done");
     });
+}
+function getServerActionImportPath(action) {
+    return ("./" +
+        path_1.default
+            .relative(path_1.default.parse(serverOutPath).dir, action.filePath)
+            .replace(/\.ts$/, ""));
 }
 function writeFilePromise(filePath, content) {
     return new Promise((resolve, reject) => {

@@ -28,7 +28,6 @@ export default async function findActionModules(
  */
 async function resolveAction(filePath: string): Promise<ActionModule> {
   const actionName = path.parse(filePath).name.replace(/\.action/, "");
-  const importPath = filePath.replace(/\.ts$/, '');
   const endpoint = `/api/${actionName}`;
   const validateResult = true;
   const optionsInterfaceName = `${properCase(actionName)}Options`;
@@ -52,7 +51,6 @@ async function resolveAction(filePath: string): Promise<ActionModule> {
 
   return {
     actionName,
-    importPath,
     endpoint,
     filePath,
     optionsSchema,

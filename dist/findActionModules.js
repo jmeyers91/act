@@ -45,7 +45,6 @@ exports.default = findActionModules;
 function resolveAction(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
         const actionName = path_1.default.parse(filePath).name.replace(/\.action/, "");
-        const importPath = filePath.replace(/\.ts$/, '');
         const endpoint = `/api/${actionName}`;
         const validateResult = true;
         const optionsInterfaceName = `${properCase_1.default(actionName)}Options`;
@@ -66,7 +65,6 @@ function resolveAction(filePath) {
         ].filter((v) => !!v));
         return {
             actionName,
-            importPath,
             endpoint,
             filePath,
             optionsSchema,

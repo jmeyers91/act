@@ -10,6 +10,9 @@ export async function {{{actionName}}}({{#if hasOptions}}options: {{{optionsInte
     method: 'POST',
     {{#if hasOptions}}
     body: JSON.stringify(options),
+    headers: {
+      'Content-Type': 'application/json'
+    },
     {{/if}}
   });
   {{#if hasResult}}

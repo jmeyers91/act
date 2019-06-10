@@ -6,7 +6,6 @@ export default interface ActionModule {
   actionName: string;
   endpoint: string;
   filePath: string;
-  importPath: string;
   hasOptions: boolean;
   hasResult: boolean;
   optionsSchema: JSONSchema4 | null;

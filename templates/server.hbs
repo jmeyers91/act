@@ -1,6 +1,6 @@
 import Ajv from 'ajv';
 {{#each actions}}
-import {{{actionName}}}Raw from '{{{importPath}}}';
+import {{{actionName}}}Unwrapped from '{{{importPath}}}';
 {{/each}}
 
 const ajv = new Ajv();
@@ -17,11 +17,11 @@ const {{{actionName}}}ResultSchema = {{{resultSchemaString}}};
 const {{{actionName}}}ValidateResult = ajv.compile({ ...{{{actionName}}}ResultSchema, $async: true });
   {{/if}}
 {{/if}}
-export async function {{actionName}}({{#if hasOptions}}rawOptions: unknown{{/if}}): ReturnType<typeof {{{actionName}}}Raw> {
+export async function {{actionName}}({{#if hasOptions}}rawOptions: unknown{{/if}}): ReturnType<typeof {{{actionName}}}Unwrapped> {
   {{#if hasOptions}}
-  const options: GetOptions<typeof {{{actionName}}}Raw> = await {{{actionName}}}ValidateOptions(rawOptions);
+  const options: GetOptions<typeof {{{actionName}}}Unwrapped> = await {{{actionName}}}ValidateOptions(rawOptions);
   {{/if}}
-  {{#if hasResult}}const rawResult = {{/if}}await {{{actionName}}}Raw({{#if hasOptions}}options{{/if}});
+  {{#if hasResult}}const rawResult = {{/if}}await {{{actionName}}}Unwrapped({{#if hasOptions}}options{{/if}});
   {{#if hasResult}}
     {{#if validateResult}}
   return await {{{actionName}}}ValidateResult(rawResult);
@@ -32,3 +32,9 @@ export async function {{actionName}}({{#if hasOptions}}rawOptions: unknown{{/if}
 }
 
 {{/each}}
+
+export default {
+{{#each actions}}
+  {{actionName}},
+{{/each}}
+};
