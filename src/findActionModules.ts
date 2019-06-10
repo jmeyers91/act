@@ -1,5 +1,5 @@
 import path from "path";
-import fs, { readFile, readFileSync } from "fs";
+import { readFileSync } from "fs";
 import globby from "globby";
 import execa from "execa";
 import * as j2t from "json-schema-to-typescript";

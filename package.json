@@ -2,7 +2,7 @@
   "name": "framework",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "dependencies": {
     "execa": "^1.0.0",
     "globby": "^9.2.0",
