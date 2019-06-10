@@ -24,6 +24,7 @@ function main() {
         console.time("done");
         console.log(`Starting in ${rootPath}`);
         const actions = (yield findActionModules_1.default(rootPath)).map(action => (Object.assign({}, action, { importPath: getServerActionImportPath(action) })));
+        actions.map(action => `  ${action.actionName} - ${action.filePath}`).forEach(s => console.log(s));
         const clientSrc = templates_1.clientTemplate({
             actions
         });

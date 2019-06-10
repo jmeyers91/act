@@ -18,6 +18,9 @@ async function main() {
     ...action,
     importPath: getServerActionImportPath(action)
   }));
+
+  actions.map(action => `  ${action.actionName} - ${action.filePath}`).forEach(s => console.log(s));
+
   const clientSrc = clientTemplate({
     actions
   });
