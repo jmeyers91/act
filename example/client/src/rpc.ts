@@ -1,3 +1,8 @@
+import axios from 'axios';
+import Ajv from 'ajv';
+
+const ajv = new Ajv();
+
 export interface CreatePostOptions {
   content?: null | string;
   title: string;
@@ -9,15 +14,14 @@ export interface CreatePostResult {
   title: string;
 }
 
-export async function createPost(options: CreatePostOptions): Promise<CreatePostResult> {
-  const response = await fetch('/api/createPost', {
-    method: 'POST',
-    body: JSON.stringify(options),
-    headers: {
-      'Content-Type': 'application/json'
-    },
-  });
-  return await response.json();
+const createPostOptionsSchema = {"$schema":"http://json-schema.org/draft-07/schema#","additionalProperties":false,"defaultProperties":[],"properties":{"content":{"type":["null","string"]},"title":{"type":"string"}},"required":["title"],"type":"object"};
+const createPostOptionsValidate = ajv.compile({ ...createPostOptionsSchema, $async: true });
+const createPostResultSchema = {"$schema":"http://json-schema.org/draft-07/schema#","additionalProperties":false,"defaultProperties":[],"properties":{"content":{"type":"string"},"id":{"type":"number"},"title":{"type":"string"}},"required":["content","id","title"],"type":"object"};
+const createPostResultValidate = ajv.compile({ ...createPostResultSchema, $async: true });
+export async function createPost(rawOptions: CreatePostOptions): Promise<CreatePostResult> {
+  const options = await createPostOptionsValidate(rawOptions);
+  const response = await axios.post('/api/createPost', options);
+  return await createPostResultValidate(response.data);
 }
 
 export type GetUsersResult = {
@@ -25,11 +29,11 @@ export type GetUsersResult = {
   name: string;
 }[];
 
+const getUsersResultSchema = {"$schema":"http://json-schema.org/draft-07/schema#","items":{"additionalProperties":false,"defaultProperties":[],"properties":{"id":{"type":"number"},"name":{"type":"string"}},"required":["id","name"],"type":"object"},"type":"array"};
+const getUsersResultValidate = ajv.compile({ ...getUsersResultSchema, $async: true });
 export async function getUsers(): Promise<GetUsersResult> {
-  const response = await fetch('/api/getUsers', {
-    method: 'POST',
-  });
-  return await response.json();
+  const response = await axios.post('/api/getUsers');
+  return await getUsersResultValidate(response.data);
 }
 
 export default {

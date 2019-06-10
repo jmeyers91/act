@@ -1,22 +1,36 @@
+import axios from 'axios';
+import Ajv from 'ajv';
+
+const ajv = new Ajv();
+
 {{#each actions}}
-{{#if optionsInterface}}
+  {{#if optionsInterface}}
 {{{optionsInterface}}}
-{{/if}}
-{{#if resultInterface}}
+  {{/if}}
+  {{#if resultInterface}}
 {{{resultInterface}}}
-{{/if}}
-export async function {{{actionName}}}({{#if hasOptions}}options: {{{optionsInterfaceName}}}{{/if}}): Promise<{{#if hasResult}}{{{resultInterfaceName}}}{{else}}undefined{{/if}}> {
-  {{#if hasResult}}const response = {{/if}}await fetch('{{{endpoint}}}', {
-    method: 'POST',
-    {{#if hasOptions}}
-    body: JSON.stringify(options),
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    {{/if}}
-  });
+  {{/if}}
+  {{#if hasOptions}}
+const {{{actionName}}}OptionsSchema = {{{optionsSchemaString}}};
+const {{{actionName}}}OptionsValidate = ajv.compile({ ...{{{actionName}}}OptionsSchema, $async: true });
+  {{/if}}
   {{#if hasResult}}
-  return await response.json();
+    {{#if validateResult}}
+const {{{actionName}}}ResultSchema = {{{resultSchemaString}}};
+const {{{actionName}}}ResultValidate = ajv.compile({ ...{{{actionName}}}ResultSchema, $async: true });
+    {{/if}}
+  {{/if}}
+export async function {{{actionName}}}({{#if hasOptions}}rawOptions: {{{optionsInterfaceName}}}{{/if}}): Promise<{{#if hasResult}}{{{resultInterfaceName}}}{{else}}undefined{{/if}}> {
+  {{#if hasOptions}}
+  const options = await {{{actionName}}}OptionsValidate(rawOptions);
+  {{/if}}
+  {{#if hasResult}}const response = {{/if}}await axios.post('{{{endpoint}}}'{{#if hasOptions}}, options{{/if}});
+  {{#if hasResult}}
+    {{#if validateResult}}
+  return await {{{actionName}}}ResultValidate(response.data);
+    {{else}}
+  return await response.data;
+    {{/if}}
   {{/if}}
 }
 

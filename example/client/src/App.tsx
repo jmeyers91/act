@@ -30,9 +30,11 @@ const App: React.FC = () => {
       </header>
       <button
         onClick={async () => {
+          const d = { title: "foo", content: "bar" };
+          delete d.title;
           console.log(
             "Result",
-            await createPost({ title: "foo", content: "bar" })
+            await createPost(d).catch(console.error)
           );
         }}
       >
