@@ -10,13 +10,12 @@ export interface CreatePostResult {
 }
 
 export async function createPost(options: CreatePostOptions): Promise<CreatePostResult> {
-  console.log('createPost', options);
   const response = await fetch('/api/createPost', {
     method: 'POST',
     body: JSON.stringify(options),
-    headers:{
+    headers: {
       'Content-Type': 'application/json'
-    }
+    },
   });
   return await response.json();
 }
