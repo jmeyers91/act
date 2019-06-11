@@ -1,6 +1,6 @@
-import { JSONSchema4 } from "json-schema";
+import { JSONSchema4 } from 'json-schema';
 
-export { JSONSchema4 as Schema } from "json-schema";
+export type ActionSchema = JSONSchema4;
 
 export default interface ActionModule {
   actionName: string;
@@ -8,8 +8,8 @@ export default interface ActionModule {
   filePath: string;
   hasOptions: boolean;
   hasResult: boolean;
-  optionsSchema: JSONSchema4 | null;
-  resultSchema: JSONSchema4 | null;
+  optionsSchema: ActionSchema | null;
+  resultSchema: ActionSchema | null;
   optionsSchemaString: string | null;
   resultSchemaString: string | null;
   optionsInterfaceName: string | null;

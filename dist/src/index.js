@@ -12,19 +12,40 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(require("path"));
-const fs_1 = __importDefault(require("fs"));
+const fs_1 = require("fs");
 const findActionModules_1 = __importDefault(require("./findActionModules"));
-const templates_1 = require("./templates");
+const compileServerModule_1 = __importDefault(require("./compileServerModule"));
+const compileClientModule_1 = __importDefault(require("./compileClientModule"));
+const rootPath = path_1.default.resolve(process.argv[2] || process.cwd());
+const serverOutPath = process.argv[3] || path_1.default.join(rootPath, 'src', 'act-server.ts');
+const clientOutPath = process.argv[4] || path_1.default.join(rootPath, 'src', 'act-client.ts');
 main();
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        const rootPath = path_1.default.resolve(process.argv[2] || process.cwd());
+        console.time('done');
         console.log(`Starting in ${rootPath}`);
         const actions = yield findActionModules_1.default(rootPath);
-        const clientSrc = templates_1.clientTemplate({
-            actions
+        actions
+            .map(action => `  ${action.actionName} - ${action.filePath}`)
+            .forEach(s => console.log(s));
+        const clientSrc = compileClientModule_1.default(actions);
+        const serverSrc = compileServerModule_1.default(actions, serverOutPath);
+        yield Promise.all([
+            writeFilePromise(clientOutPath, clientSrc),
+            writeFilePromise(serverOutPath, serverSrc)
+        ]);
+        console.timeEnd('done');
+    });
+}
+function writeFilePromise(filePath, content) {
+    return new Promise((resolve, reject) => {
+        fs_1.writeFile(filePath, content, error => {
+            if (error) {
+                reject(error);
+            }
+            else {
+                resolve();
+            }
         });
-        fs_1.default.writeFileSync("./out.json", JSON.stringify(actions, null, 2));
-        fs_1.default.writeFileSync("./client.ts", clientSrc);
     });
 }

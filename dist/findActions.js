@@ -28,13 +28,13 @@ const properCase_1 = __importDefault(require("./utils/properCase"));
  * Finds and resolves all action modules in a project.
  * @param projectRoot The project root directory.
  */
-function findActionModules(projectRoot) {
+function findActions(projectRoot) {
     return __awaiter(this, void 0, void 0, function* () {
         const actionFiles = yield globby_1.default('**/*.action.ts', { cwd: projectRoot });
         return Promise.all(actionFiles.map(relativePath => resolveAction(path_1.default.join(projectRoot, relativePath))));
     });
 }
-exports.default = findActionModules;
+exports.default = findActions;
 /**
  * Resolves an action module.
  * @param filePath The full path to the action file.

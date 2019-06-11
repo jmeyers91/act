@@ -45,12 +45,16 @@ exports.default = findActionModules;
 function resolveAction(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
         const actionName = path_1.default.parse(filePath).name.replace(/\.action/, "");
+        const endpoint = `/api/${actionName}`;
+        const validateResult = true;
         const optionsInterfaceName = `${properCase_1.default(actionName)}Options`;
         const resultInterfaceName = `${properCase_1.default(actionName)}Result`;
         const [optionsSchema, resultSchema] = yield Promise.all([
             getSchema(filePath, "Options"),
             getSchema(filePath, "Result")
         ]);
+        const optionsSchemaString = optionsSchema ? JSON.stringify(optionsSchema) : null;
+        const resultSchemaString = resultSchema ? JSON.stringify(resultSchema) : null;
         const hasOptions = !!optionsSchema;
         const hasResult = !!resultSchema;
         const [optionsInterface, resultInterface] = yield Promise.all([
@@ -61,15 +65,19 @@ function resolveAction(filePath) {
         ].filter((v) => !!v));
         return {
             actionName,
+            endpoint,
             filePath,
             optionsSchema,
             resultSchema,
+            optionsSchemaString,
+            resultSchemaString,
             optionsInterface,
             resultInterface,
             optionsInterfaceName,
             resultInterfaceName,
             hasOptions,
-            hasResult
+            hasResult,
+            validateResult
         };
     });
 }
@@ -81,7 +89,7 @@ function resolveAction(filePath) {
  */
 function getSchema(filePath, typeName) {
     return __awaiter(this, void 0, void 0, function* () {
-        const options = ["--defaultProps", "--strictNullChecks", "--required"];
+        const options = ["--defaultProps", "--strictNullChecks", "--required", "--noExtraProps"];
         const binPath = path_1.default.resolve(__dirname, "..", "node_modules", ".bin", "typescript-json-schema");
         const contents = fs_1.readFileSync(filePath, "utf8");
         if (!contents.includes(`type ${typeName}`) &&

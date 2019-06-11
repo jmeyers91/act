@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import logo from "./logo.svg";
-import { createPost } from "./rpc";
-import "./App.css";
+import React, { useEffect } from 'react';
+import logo from './logo.svg';
+import { createPost } from './rpc';
+import './App.css';
 
 const App: React.FC = () => {
   // useEffect(() => {
@@ -30,12 +30,9 @@ const App: React.FC = () => {
       </header>
       <button
         onClick={async () => {
-          const d = { title: "foo", content: "bar" };
-          delete d.title;
-          console.log(
-            "Result",
-            await createPost(d).catch(console.error)
-          );
+          const d = { title: 'foo', content: 'bar' };
+          // delete d.title;
+          console.log('Result', await createPost(d).catch(console.error));
         }}
       >
         Do thing

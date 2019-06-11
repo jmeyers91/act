@@ -1,14 +1,22 @@
-import { readFileSync } from "fs";
-import path from "path";
-import Handlebars, { TemplateDelegate } from "handlebars";
+import { readFileSync } from 'fs';
+import path from 'path';
+import Handlebars, { TemplateDelegate } from 'handlebars';
+import Action from './Action';
 
-const templateRoot = path.resolve(__dirname, "..", "templates");
+const templateRoot = path.resolve(__dirname, '..', 'templates');
 
-export const clientTemplate = loadTemplate("client");
-export const serverTemplate = loadTemplate("server");
+export interface ClientTemplateProps {
+  actions: Action[];
+}
+export const clientTemplate = loadTemplate<ClientTemplateProps>('client');
 
-function loadTemplate(name: string): TemplateDelegate {
+export interface ServerTemplateProps {
+  actions: (Action & { importPath: string })[];
+}
+export const serverTemplate = loadTemplate<ServerTemplateProps>('server');
+
+function loadTemplate<T = any>(name: string): TemplateDelegate<T> {
   const templatePath = path.join(templateRoot, `${name}.hbs`);
-  const templateSrc = readFileSync(templatePath, "utf8");
+  const templateSrc = readFileSync(templatePath, 'utf8');
   return Handlebars.compile(templateSrc);
 }
