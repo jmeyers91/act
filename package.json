@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
+  "bin": {
+    "typetether": "./dist/cli.js"
+  },
   "dependencies": {
     "commander": "^2.20.0",
     "execa": "^1.0.0",

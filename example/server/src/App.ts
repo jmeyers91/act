@@ -1,4 +1,4 @@
-import Koa from "koa";
+import Koa, { Context } from "koa";
 import bodyParser from "koa-bodyparser";
 import { Server as HTTPServer } from "http";
 import rpcActions from "./rpc";
@@ -18,12 +18,12 @@ export default class ActApp {
     this.options = options;
   }
 
-  async runAction(actionName: string, rawOptions: unknown): Promise<unknown> {
+  async runAction(context: Context, actionName: string, rawOptions: unknown): Promise<unknown> {
     if(!isValidAction(actionName)) {
       throw new Error(`Action not found "${actionName}"`);
     }
     console.log(actionName, rawOptions);
-    return await rpcActions[actionName](rawOptions);
+    return await rpcActions[actionName](rawOptions, context);
   }
 
   async listen() {
@@ -57,7 +57,7 @@ export default class ActApp {
         if (match) {
           const actionName = match[1];
           const rawOptions = request.body;
-          context.body = await this.runAction(actionName, rawOptions);
+          context.body = await this.runAction(context, actionName, rawOptions);
           context.status = 200;
         }
 
