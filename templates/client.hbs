@@ -27,7 +27,7 @@ export async function {{{actionName}}}({{#if hasOptions}}rawOptions: {{{optionsI
   {{#if hasOptions}}
   const options = await {{{actionName}}}OptionsValidate(rawOptions);
   {{/if}}
-  {{#if hasResult}}const response = {{/if}}await axios.post('{{{endpoint}}}'{{#if hasOptions}}, options{{/if}});
+  {{#if hasResult}}const response = {{/if}}await axios.{{#if hasOptions}}post{{else}}get{{/if}}('{{{endpoint}}}'{{#if hasOptions}}, options{{/if}});
   {{#if hasResult}}
     {{#if validateResult}}
   return await {{{actionName}}}ResultValidate(response.data);

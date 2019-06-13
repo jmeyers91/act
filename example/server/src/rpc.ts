@@ -6,9 +6,20 @@ import createPostUnwrapped from './actions/createPost.action';
 import getUsersUnwrapped from './actions/getUsers.action';
 
 const ajv = new Ajv();
+const actions = {
+  createPost,
+  getUsers,
+};
+
 type GetOptions <F> = F extends (options: infer G, ...rest: any[]) => any ? G : undefined;
 type GetRest<F> = F extends (options: any, ...rest: infer G) => any ? G : undefined;
 type GenericAction<R> = (...args: any[]) => R;
+type ActionIndex = typeof actions;
+type ActionName = keyof ActionIndex;
+
+export function isAction(actionName: unknown): actionName is ActionName {
+  return typeof actionName === 'string' && actions.hasOwnProperty(actionName);
+}
 
 const createPostOptionsSchema = {"$schema":"http://json-schema.org/draft-07/schema#","anyOf":[{"additionalProperties":false,"defaultProperties":[],"properties":{"content":{"type":["null","string"]},"title":{"type":"string"}},"required":["title"],"type":"object"},{"additionalProperties":false,"defaultProperties":[],"properties":{"foo":{"type":["string","number"]},"posts":{"$ref":"#/definitions/default"}},"required":["foo","posts"],"type":"object"}],"definitions":{"default":{"additionalProperties":false,"defaultProperties":[],"properties":{"content":{"type":"string"},"id":{"type":"number"},"title":{"type":"string"}},"required":["content","id","title"],"type":"object"}}};
 const createPostValidateOptions = ajv.compile({ ...createPostOptionsSchema, $async: true });
@@ -34,7 +45,4 @@ export async function getUsers(_: unknown, ...rest: Parameters<typeof getUsersUn
   return await getUsersValidateResult(rawResult);
 }
 
-export default {
-  createPost,
-  getUsers,
-};
+export default actions;

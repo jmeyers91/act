@@ -7,9 +7,21 @@ import {{{actionName}}}Unwrapped from '{{{importPath}}}';
 {{/each}}
 
 const ajv = new Ajv();
+const actions = {
+{{#each actions}}
+  {{actionName}},
+{{/each}}
+};
+
 type GetOptions <F> = F extends (options: infer G, ...rest: any[]) => any ? G : undefined;
 type GetRest<F> = F extends (options: any, ...rest: infer G) => any ? G : undefined;
 type GenericAction<R> = (...args: any[]) => R;
+type ActionIndex = typeof actions;
+type ActionName = keyof ActionIndex;
+
+export function isAction(actionName: unknown): actionName is ActionName {
+  return typeof actionName === 'string' && actions.hasOwnProperty(actionName);
+}
 
 {{#each actions}}
 {{#if hasOptions}}
@@ -41,8 +53,4 @@ export async function {{{actionName}}}({{#if hasOptions}}rawOptions{{else}}_{{/i
 }
 
 {{/each}}
-export default {
-{{#each actions}}
-  {{actionName}},
-{{/each}}
-};
+export default actions;

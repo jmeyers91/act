@@ -46,7 +46,7 @@ export type GetUsersResult = {
 const getUsersResultSchema = {"$schema":"http://json-schema.org/draft-07/schema#","items":{"additionalProperties":false,"defaultProperties":[],"properties":{"id":{"type":"number"},"name":{"type":"string"}},"required":["id","name"],"type":"object"},"type":"array"};
 const getUsersResultValidate = ajv.compile({ ...getUsersResultSchema, $async: true });
 export async function getUsers(): Promise<GetUsersResult> {
-  const response = await axios.post('/api/getUsers');
+  const response = await axios.get('/api/getUsers');
   return await getUsersResultValidate(response.data);
 }
 
