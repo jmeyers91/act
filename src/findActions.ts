@@ -13,16 +13,16 @@ import capitalizeStart from './utils/capitalizeStart';
 export default async function findActions(
   projectRoot: string
 ): Promise<Action[]> {
-  const actionFiles = await globby('**/*.action.ts', { cwd: projectRoot });
+  const actionFiles = await globby('**/*.action.ts', {
+    cwd: projectRoot,
+    ignore: ['node_modules']
+  });
+  console.log('Found action files');
+  console.log(actionFiles.join('\n'));
   const actions = await Promise.all(
     actionFiles.map(relativePath =>
       resolveAction(path.join(projectRoot, relativePath))
     )
-  );
-
-  require('fs').writeFileSync(
-    './actions.json',
-    JSON.stringify(actions, null, 2)
   );
 
   return actions;

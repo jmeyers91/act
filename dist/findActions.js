@@ -30,9 +30,13 @@ const capitalizeStart_1 = __importDefault(require("./utils/capitalizeStart"));
  */
 function findActions(projectRoot) {
     return __awaiter(this, void 0, void 0, function* () {
-        const actionFiles = yield globby_1.default('**/*.action.ts', { cwd: projectRoot });
+        const actionFiles = yield globby_1.default('**/*.action.ts', {
+            cwd: projectRoot,
+            ignore: ['node_modules']
+        });
+        console.log('Found action files');
+        console.log(actionFiles.join('\n'));
         const actions = yield Promise.all(actionFiles.map(relativePath => resolveAction(path_1.default.join(projectRoot, relativePath))));
-        require('fs').writeFileSync('./actions.json', JSON.stringify(actions, null, 2));
         return actions;
     });
 }
