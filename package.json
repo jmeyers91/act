@@ -25,7 +25,7 @@
   },
   "scripts": {
     "test": "NODE_ENV=test jest",
-    "build": "tsc",
+    "build": "tsc && chmod +x dist/cli.js",
     "cli": "npm run build && node dist/cli.js",
     "build-example": "npm run cli -- foo -r example -s example/server/src/rpc.ts -c example/client/src/rpc.ts",
     "start-example-server": "cd example/server && npm run start",

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import commander from 'commander';
 import packageJSON from './package';
 import findActions from './findActions';
