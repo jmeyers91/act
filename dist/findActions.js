@@ -30,9 +30,9 @@ const capitalizeStart_1 = __importDefault(require("./utils/capitalizeStart"));
  */
 function findActions(projectRoot) {
     return __awaiter(this, void 0, void 0, function* () {
-        const actionFiles = yield globby_1.default("**/*.action.ts", { cwd: projectRoot });
+        const actionFiles = yield globby_1.default('**/*.action.ts', { cwd: projectRoot });
         const actions = yield Promise.all(actionFiles.map(relativePath => resolveAction(path_1.default.join(projectRoot, relativePath))));
-        require("fs").writeFileSync("./actions.json", JSON.stringify(actions, null, 2));
+        require('fs').writeFileSync('./actions.json', JSON.stringify(actions, null, 2));
         return actions;
     });
 }
@@ -43,15 +43,15 @@ exports.default = findActions;
  */
 function resolveAction(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
-        const actionName = path_1.default.parse(filePath).name.replace(/\.action/, "");
+        const actionName = path_1.default.parse(filePath).name.replace(/\.action/, '');
         console.time(actionName);
         const endpoint = `/api/${actionName}`;
         const validateResult = true;
         const optionsInterfaceName = `${capitalizeStart_1.default(actionName)}Options`;
         const resultInterfaceName = `${capitalizeStart_1.default(actionName)}Result`;
         const [optionsSchema, resultSchema] = yield Promise.all([
-            getSchema(filePath, "Options"),
-            getSchema(filePath, "Result")
+            getSchema(filePath, 'Options'),
+            getSchema(filePath, 'Result')
         ]);
         const optionsSchemaString = optionsSchema
             ? JSON.stringify(optionsSchema)
@@ -61,12 +61,12 @@ function resolveAction(filePath) {
         const hasResult = !!resultSchema;
         const optionsInterface = optionsSchema
             ? yield j2t.compile(optionsSchema, optionsInterfaceName, {
-                bannerComment: ""
+                bannerComment: ''
             })
             : null;
         const resultInterface = resultSchema
             ? yield j2t.compile(resultSchema, resultInterfaceName, {
-                bannerComment: ""
+                bannerComment: ''
             })
             : null;
         console.timeEnd(actionName);
@@ -97,20 +97,23 @@ function resolveAction(filePath) {
 function getSchema(filePath, typeName) {
     return __awaiter(this, void 0, void 0, function* () {
         const options = [
-            "--defaultProps",
-            "--strictNullChecks",
-            "--required",
-            "--noExtraProps"
+            '--defaultProps',
+            '--strictNullChecks',
+            '--required',
+            '--noExtraProps'
         ];
-        const binPath = path_1.default.resolve(__dirname, "..", "node_modules", ".bin", "typescript-json-schema");
-        const contents = fs_1.readFileSync(filePath, "utf8");
+        const contents = fs_1.readFileSync(filePath, 'utf8');
         if (!contents.includes(`type ${typeName}`) &&
             !contents.includes(`interface ${typeName}`) &&
             !contents.includes(`class ${typeName}`)) {
             return null;
         }
         try {
-            const { stdout } = yield execa_1.default(binPath, [...options, filePath, typeName]);
+            const { stdout } = yield execa_1.default('typescript-json-schema', [
+                ...options,
+                filePath,
+                typeName
+            ]);
             return JSON.parse(stdout);
         }
         catch (error) {
