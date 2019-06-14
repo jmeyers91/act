@@ -1,5 +1,8 @@
 import { writeFile } from 'fs';
 
+/**
+ * `fs.writeFile` wrapped in a promise.
+ */
 export default function writeFilePromise(
   filePath: string,
   content: string

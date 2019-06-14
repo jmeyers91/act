@@ -1,4 +1,4 @@
-export default function properCase(input: string): string {
+export default function capitalizeStart(input: string): string {
   if (input.length === 0) {
     return "";
   }
