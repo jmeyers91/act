@@ -58,9 +58,9 @@ function resolveAction(filePath) {
             getSchema(filePath, 'Result')
         ]);
         const optionsSchemaString = optionsSchema
-            ? JSON.stringify(optionsSchema)
+            ? JSON.stringify(optionsSchema, null, 2)
             : null;
-        const resultSchemaString = resultSchema ? JSON.stringify(resultSchema) : null;
+        const resultSchemaString = resultSchema ? JSON.stringify(resultSchema, null, 2) : null;
         const hasOptions = !!optionsSchema;
         const hasResult = !!resultSchema;
         const optionsInterface = optionsSchema
@@ -104,7 +104,8 @@ function getSchema(filePath, typeName) {
             '--defaultProps',
             '--strictNullChecks',
             '--required',
-            '--noExtraProps'
+            '--noExtraProps',
+            '--ignoreErrors'
         ];
         const contents = fs_1.readFileSync(filePath, 'utf8');
         if (!contents.includes(`type ${typeName}`) &&

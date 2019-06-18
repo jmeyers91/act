@@ -44,9 +44,9 @@ async function resolveAction(filePath: string): Promise<Action> {
     getSchema(filePath, 'Result')
   ]);
   const optionsSchemaString = optionsSchema
-    ? JSON.stringify(optionsSchema)
+    ? JSON.stringify(optionsSchema, null, 2)
     : null;
-  const resultSchemaString = resultSchema ? JSON.stringify(resultSchema) : null;
+  const resultSchemaString = resultSchema ? JSON.stringify(resultSchema, null, 2) : null;
   const hasOptions = !!optionsSchema;
   const hasResult = !!resultSchema;
   const optionsInterface = optionsSchema
@@ -94,7 +94,8 @@ async function getSchema(
     '--defaultProps',
     '--strictNullChecks',
     '--required',
-    '--noExtraProps'
+    '--noExtraProps',
+    '--ignoreErrors'
   ];
   const contents = readFileSync(filePath, 'utf8');
   if (

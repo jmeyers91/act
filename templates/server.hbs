@@ -6,7 +6,7 @@ import Ajv from 'ajv';
 import {{{actionName}}}Unwrapped from '{{{importPath}}}';
 {{/each}}
 
-const ajv = new Ajv();
+const ajv = new Ajv({ coerceTypes: true });
 const actions = {
 {{#each actions}}
   {{actionName}},
@@ -38,7 +38,7 @@ const {{{actionName}}}ValidateResult = ajv.compile({ ...{{{actionName}}}ResultSc
 {{{actionName}}}.hasOptions = {{#if hasOptions}}true{{else}}false{{/if}};
 {{{actionName}}}.hasResult = {{#if hasResult}}true{{else}}false{{/if}};
 export async function {{{actionName}}}({{#if hasOptions}}rawOptions{{else}}_{{/if}}: unknown, ...rest: {{#if hasOptions}}GetRest<typeof {{{actionName}}}Unwrapped>{{else}}Parameters<typeof {{{actionName}}}Unwrapped>{{/if}}): ReturnType<typeof {{{actionName}}}Unwrapped> {
-  const actionFn: GenericAction<{{#if hasResult}}ReturnType<typeof {{{actionName}}}Unwrapped>{{else}}undefined{{/if}}> = {{{actionName}}}Unwrapped;
+  const actionFn: GenericAction<{{#if hasResult}}ReturnType<typeof {{{actionName}}}Unwrapped>{{else}}Promise<void>{{/if}}> = {{{actionName}}}Unwrapped;
   {{#if hasOptions}}
   const options: GetOptions<typeof {{{actionName}}}Unwrapped> = await {{{actionName}}}ValidateOptions(rawOptions);
   {{/if}}
